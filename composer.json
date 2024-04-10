@@ -1,0 +1,39 @@
+{
+  "name": "pronskiy/locus",
+  "description": "Composer plugin installs local PHP interpreter",
+  "keywords": [
+    "php",
+    "local",
+    "dev",
+    "environment",
+    "plugin"
+  ],
+  "license": "MIT",
+  "type": "composer-plugin",
+  "require": {
+    "php": "^8.1.0",
+    "ext-json": "*",
+    "composer-plugin-api": "^2.0"
+  },
+  "require-dev": {
+    "composer/composer": "^2.0",
+    "symfony/var-dumper": "^v7.0.4",
+    "pestphp/pest": "^v2.34.7"
+  },
+  "bin": [
+    "bin/php"
+  ],
+  "extra": {
+    "class": "Locus\\PhpPlugin"
+  },
+  "autoload": {
+    "psr-4": {
+      "Locus\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
