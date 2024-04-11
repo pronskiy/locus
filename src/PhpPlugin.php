@@ -23,9 +23,9 @@ class PhpPlugin implements PluginInterface, EventSubscriberInterface
         self::installPhp($event->getComposer());
     }
     
-    private static function normalizePhpVersion(string $php_version): string
+    public static function normalizePhpVersion(string $php_version): string
     {
-        $php_version = str_replace(['^', '~', '*', ' '], '', $php_version);
+        $php_version = rtrim(str_replace(['^', '~', '*', ' ', '>', '='], '', $php_version), '.');
 
         if (substr_count($php_version, '.') == 2) {
             return $php_version;
