@@ -14,7 +14,7 @@ class PhpPlugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            PackageEvents::PRE_PACKAGE_INSTALL => 'prePackageInstall',
+//            PackageEvents::PRE_PACKAGE_INSTALL => 'prePackageInstall',
         ];
     }
 
@@ -84,7 +84,7 @@ class PhpPlugin implements PluginInterface, EventSubscriberInterface
 
     public function activate(Composer $composer, IOInterface $io)
     {
-        // TODO: Implement activate() method.
+        self::installPhp($composer);
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
