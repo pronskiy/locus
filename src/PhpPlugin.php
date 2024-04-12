@@ -4,37 +4,37 @@ namespace Locus;
 
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
-use Composer\Installer\PackageEvent;
+use Composer\Semver\VersionParser;
 
 class PhpPlugin implements PluginInterface, EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
-//            PackageEvents::PRE_PACKAGE_INSTALL => 'prePackageInstall',
         ];
     }
 
-    public static function prePackageInstall(PackageEvent $event)
-    {
-        self::installPhp($event->getComposer());
-    }
-    
     public static function normalizePhpVersion(string $php_version): string
     {
-        $php_version = rtrim(str_replace(['^', '~', '*', ' ', '>', '='], '', $php_version), '.');
+        $semverParser = new VersionParser();
+        $constraint = $semverParser->parseConstraints($php_version);
 
-        if (substr_count($php_version, '.') == 2) {
-            return $php_version;
+        // @TODO Un-hardcode this list
+        $available_versions = array_reverse([
+            '8.0.30', 
+            '8.1.23', '8.1.25', '8.1.26', '8.1.27', 
+            '8.2.10', '8.2.12', '8.2.13', '8.2.14', '8.2.15', '8.2.16', '8.2.17', 
+            '8.3.0', '8.3.1', '8.3.2', '8.3.3', '8.3.4',
+        ]);
+        
+        foreach ($available_versions as $version) {
+            if ($constraint->matches( $semverParser->parseConstraints($version))) {
+                $php_version = $version;
+                break;
+            }
         }
-
-        $versionData = file_get_contents('https://phpreleases.com/api/releases/' . $php_version);
-        $php_releases = json_decode($versionData, flags: JSON_THROW_ON_ERROR);
-
-        $php_version = sprintf('%d.%d.%d', $php_releases[0]->major, $php_releases[0]->minor, $php_releases[0]->release); 
         
         return $php_version;
     }
@@ -89,11 +89,10 @@ class PhpPlugin implements PluginInterface, EventSubscriberInterface
 
     public function deactivate(Composer $composer, IOInterface $io)
     {
-        // TODO: Implement deactivate() method.
     }
 
     public function uninstall(Composer $composer, IOInterface $io)
     {
-        // TODO: Implement uninstall() method.
+        // TODO: Cleanup
     }
 }
