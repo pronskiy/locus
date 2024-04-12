@@ -4,6 +4,14 @@ Installs a per-project `php` binary to the `./vendor/bin/` based on `composer.js
 
 ## Setup and Installation
 
+Make sure you have a PHP version constraint specified in your `composer.json`:
+
+```json
+"require": {
+  "php": "^8.3"
+},
+```
+
 ```bash
 composer require pronskiy/locus --dev 
 ```
