@@ -1,6 +1,6 @@
 # Locus
 
-Composer plugin that installs a per-project `php` binary to the `./vendor/bin/` based on `composer.json` requirements.
+Installs a per-project `php` binary to the `./vendor/bin/` based on `composer.json` requirements.
 
 ## Setup and Installation
 
