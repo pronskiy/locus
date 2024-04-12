@@ -12,6 +12,7 @@ Make sure you have a PHP version constraint specified in your `composer.json`:
 },
 ```
 
+Then run the following command to add locus:
 ```bash
 composer require pronskiy/locus --dev 
 ```
