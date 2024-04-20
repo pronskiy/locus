@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__."/../vendor/autoload.php";
+
+$composerJsonPath = 'composer.json';
+
+if (!file_exists($composerJsonPath)) {
+    echo "composer.json not found\n";
+    exit;
+}
+
+$composer_json = json_decode(file_get_contents($composerJsonPath), true);
+
+if (!isset($composer_json['require']['php'])) {
+    echo "No PHP requirements found\n";
+    exit;
+}
+
+try {
+    \Locus\PhpInstaller::downloadPhp($composer_json['require']['php'], 'vendor/php', 'vendor/bin');
+} catch (Exception $e) {
+    echo "Error downloading PHP: " . $e->getMessage() . "\n";
+    exit;
+}
+
+exec('vendor/bin/php --version', $output);
+echo "PHP installed:\n", implode("\n", $output);

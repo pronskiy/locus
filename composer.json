@@ -16,12 +16,13 @@
     "composer-plugin-api": "^2.0"
   },
   "require-dev": {
-    "composer/composer": "^2.0",
+    "composer/composer": "^2.7.3",
     "symfony/var-dumper": "^v7.0.4",
     "pestphp/pest": "^v2.34.7"
   },
   "bin": [
-    "bin/php"
+    "bin/php",
+    "bin/locus"
   ],
   "extra": {
     "class": "Locus\\PhpPlugin"
