@@ -2,6 +2,7 @@
 
 namespace Locus;
 
+use Archive_Tar;
 use Composer\Semver\VersionParser;
 
 class PhpInstaller
@@ -30,10 +31,12 @@ class PhpInstaller
         is_dir($download_path) || mkdir(directory: $download_path, recursive: true);
         is_dir($bin_dir) || mkdir(directory: $bin_dir, recursive: true);
 
-        file_put_contents($download_path . $php_file, fopen($downloadUrl, 'r'));
+        self::download($downloadUrl, $download_path.$php_file);
+        
+        $ar = new Archive_Tar($download_path . $php_file);
+        $ar->extract($bin_dir);
 
-        $phar = new \PharData($download_path . $php_file);
-        return $phar->extractTo(directory: $bin_dir, overwrite: true);
+        return true;
     }
 
     public static function normalizePhpVersion(string $php_version): string
@@ -57,5 +60,20 @@ class PhpInstaller
         }
 
         return $php_version;
+    }
+
+    public static function download($file_source, $file_target)
+    {
+        $context_options= [
+            'ssl' => [
+                'cafile' => __DIR__.'/cacert.pem',
+                'verify_peer'=> true,
+                'verify_peer_name'=> true,
+            ],
+        ];
+        file_put_contents(
+            $file_target,
+            fopen($file_source, 'r', false, stream_context_create($context_options))
+        );
     }
 }
